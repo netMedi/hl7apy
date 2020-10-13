@@ -169,7 +169,8 @@ class MLLPServer(ThreadingTCPServer):
         self.port = port
         self.handlers = handlers
         self.timeout = timeout
-        ThreadingTCPServer.__init__(self, (host, port), request_handler_class)
+        self.server = ThreadingTCPServer.__init__(self, (host, port), request_handler_class)
+
 
 
 class AbstractHandler(object):
