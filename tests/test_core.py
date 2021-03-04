@@ -393,6 +393,60 @@ class TestMessage(unittest.TestCase):
         self.assertRaises(LegacyMessageProfile, Message, 'RAS_O17', reference=self.legacy_mp)
 
 
+    def test_basic_functionality_with_inheritance(self):
+        class NewMessage(Message):
+            def __init__(self, name=None, reference=None, version=None, validation_level=None, encoding_chars=None):
+                super().__init__(name=name,
+                                 reference=reference,
+                                 version=version,
+                                 validation_level=validation_level,
+                                 encoding_chars=encoding_chars)
+        class NewSegment(Segment):
+            def __init__(self, name=None, parent=None, reference=None, version=None, validation_level=None, traversal_parent=None):
+                super().__init__(name=name,
+                                 parent=parent,
+                                 reference=reference,
+                                 version=version,
+                                 validation_level=validation_level,
+                                 traversal_parent=traversal_parent)
+        class NewGroup(Group):
+             def __init__(self, name=None, parent=None, reference=None, version=None, validation_level=None, traversal_parent=None):
+                super().__init__(name=name,
+                                 parent=parent,
+                                 reference=reference,
+                                 version=version,
+                                 validation_level=validation_level,
+                                 traversal_parent=traversal_parent)
+        class NewField(Field):
+            def __init__(self, name=None, datatype=None, parent=None, reference=None, version=None, validation_level=None, traversal_parent=None):
+                super().__init__(name=name,
+                                 datatype=datatype,
+                                 parent=parent,
+                                 reference=reference,
+                                 version=version,
+                                 validation_level=validation_level,
+                                 traversal_parent=traversal_parent)
+        class NewComponent(Component):
+            def __init__(self, name=None, datatype=None, parent=None, reference=None, version=None, validation_level=None, traversal_parent=None):
+                super().__init__(name=name,
+                                 datatype=datatype,
+                                 parent=parent,
+                                 reference=reference,
+                                 version=version,
+                                 validation_level=validation_level,
+                                 traversal_parent=traversal_parent)
+
+        a = NewMessage('OML_O33',  validation_level=VALIDATION_LEVEL.TOLERANT)
+        msh = NewSegment('MSH', validation_level=VALIDATION_LEVEL.TOLERANT)
+        pid = NewSegment('PID', validation_level=VALIDATION_LEVEL.TOLERANT)
+        f = NewField('PID_4', validation_level=VALIDATION_LEVEL.TOLERANT)
+        c = NewComponent('CX_10', validation_level=VALIDATION_LEVEL.TOLERANT)
+        pid.add(f)
+        g = NewGroup('OML_O33_PATIENT')
+        g.add(pid)
+        a.add(msh)
+        a.add(g)
+
 class TestGroup(unittest.TestCase):
 
     # Group test cases
