@@ -1245,6 +1245,16 @@ class Component(SupportComplexDataType, CanBeVaries):
                 not is_base_datatype(self.datatype, self.version) and self.datatype != 'varies':
             raise OperationNotAllowed("Cannot instantiate an unknown Element with strict validation")
 
+    @property
+    def classname(self):
+        """
+        Override property and return name of the public base class.
+        
+        This is required to make inheritance possible as multiple checks (e.g. _is_valid_child)
+        depend on classname.
+        """
+        return Component.__name__
+
     def add_subcomponent(self, name):
         """
         Create an instance of :class:`SubComponent <hl7apy.core.SubComponent>` having the given name
@@ -1373,6 +1383,16 @@ class Field(SupportComplexDataType):
             self.datatype = datatype
         elif self.name is None:  # if it is unknown and no datatype has been given
             self.datatype = None
+
+    @property
+    def classname(self):
+        """
+        Override property and return name of the public base class.
+        
+        This is required to make inheritance possible as multiple checks (e.g. _is_valid_child)
+        depend on classname.
+        """
+        return Field.__name__
 
     def add_component(self, name):
         """
@@ -1618,6 +1638,16 @@ class Segment(Element):
             self._last_allowed_child_index = int(last_field_structure['name'][4:])
             self._last_child_index = self._last_allowed_child_index
 
+    @property
+    def classname(self):
+        """
+        Override property and return name of the public base class.
+        
+        This is required to make inheritance possible as multiple checks (e.g. _is_valid_child)
+        depend on classname.
+        """
+        return Segment.__name__
+
     def add(self, obj):
         super(Segment, self).add(obj)
         # updates the index of the last children not allowed
@@ -1791,6 +1821,16 @@ class Group(Element):
         if self.name is None and Validator.is_strict(self.validation_level):
             raise OperationNotAllowed("Cannot instantiate an unknown Element with strict validation")
 
+    @property
+    def classname(self):
+        """
+        Override property and return name of the public base class.
+        
+        This is required to make inheritance possible as multiple checks (e.g. _is_valid_child)
+        depend on classname.
+        """
+        return Group.__name__
+
     def add_segment(self, name):
         """
         Create an instance of :class:`Segment <hl7apy.core.Segment>` having the given name
@@ -1939,6 +1979,16 @@ class Message(Group):
         self.encoding_chars = encoding_chars
         self.msh.msh_7 = datetime.datetime.now().strftime('%Y%m%d%H%M%S')
         self.msh.msh_12 = self.version
+
+    @property
+    def classname(self):
+        """
+        Override property and return name of the public base class.
+        
+        This is required to make inheritance possible as multiple checks (e.g. _is_valid_child)
+        depend on classname.
+        """
+        return Message.__name__
 
     def find_child_reference(self, name):
         name = name.upper()
